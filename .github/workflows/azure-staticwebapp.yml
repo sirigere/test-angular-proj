@@ -1,0 +1,25 @@
+name: Build and Deploy Angular
+on: workflow_dispatch
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm run build -- --configuration production
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: '479192b3-666b-430b-8529-4023e6d869da'
+          tenant-id: 'c507f9a2-8cf7-4497-90a1-fce4c91204b6'
+          subscription-id: '1e900c27-d136-48bf-9b17-4fb869598b7d'
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: angular-app
+          path: dist/my-angular-app
