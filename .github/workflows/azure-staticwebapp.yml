@@ -1,5 +1,8 @@
 name: Build and Deploy Angular
 on: workflow_dispatch
+permissions:
+  id-token: write
+  contents: read
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -23,3 +26,9 @@ jobs:
         with:
           name: angular-app
           path: dist/my-angular-app
+
+      - name: Deploy to Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: my-angular-app
+          package: dist/my-angular-app/browser
